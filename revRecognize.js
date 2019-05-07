@@ -159,7 +159,7 @@ RecognizeStream.prototype._write = function (chunk, encoding, callback) {
         this.once('listening', function () {
             console.log('RR listening')
             self.socket.send(chunk);
-            //   self.afterSend(callback);
+            self.afterSend(callback);
         });
     }
 };
