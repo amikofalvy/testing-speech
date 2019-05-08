@@ -5,13 +5,13 @@ try {
 }
 
 const fs = require('fs');
-const st = require('stream-throttle');
 
 // Creates a client
 const RevRecognize = require('./revRecognize');
 
 const stream = new RevRecognize({
     url: `wss://api.rev.ai/speechtotext/v1alpha/stream?access_token=${process.env.REV_TOKEN}&content_type=audio/x-raw;layout=interleaved;rate=44100;format=S16LE;channels=1`,
+    headers: ''
 });
 stream.on('error', err => {
     console.log({ msg: 'error from rev stream', err });
@@ -25,13 +25,7 @@ stream.on('error', err => {
 const filename = './discovery-1min.raw'
 
 // Stream an audio file from disk to the Speech API, e.g. "./resources/audio.raw"
-var readStream = fs.createReadStream(filename);
-readStream.on('open', function() {
-    readStream.pipe(stream);
-});
-readStream.on('error', function(err) {
-    console.log(err);
-});
+fs.createReadStream(filename).pipe(stream);
 
 const secs = 85;
 console.log(`ending stream in ${secs} sec`);
@@ -41,6 +35,6 @@ setTimeout(() => {
     stream.stop();
     console.log('waiting 5 more secs for stream to print final message');
     setTimeout(() => {
-        console.log('end script')
+        console.log('end scrript')
     }, 5000);
 }, secs*1000);
